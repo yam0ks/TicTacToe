@@ -1,10 +1,5 @@
 #include "gamerules.h"
 
-GameRules::GameRules()
-    : table(new Table())
-{
-}
-
 value_type GameRules::SearchWinner(const QVector<Table_::Square*>& squares, const int index) const
 {
     value_type current_check;
@@ -174,7 +169,7 @@ void GameRules::SetLineSize(const int new_size)
     line_size = new_size;
 }
 
-int GameRules::GetLineSize()
+qreal GameRules::GetLineSize() const
 {
     return line_size;
 }
@@ -184,7 +179,7 @@ void GameRules::SetSqrSize(const int new_size)
     sqr_size = new_size;
 }
 
-int GameRules::GetSqrSize()
+qreal GameRules::GetSqrSize() const
 {
     return sqr_size;
 }
@@ -193,46 +188,41 @@ void GameRules::StartGame(QGraphicsView *view)
 {
     const int offset = 2;
 
-    view->setScene(table->GetScene());
-    table->GetScene()->setSceneRect(0, 0, view->width() - offset, view->height() - offset);
+    view->setScene(table.GetScene());
+    table.GetScene()->setSceneRect(0, 0, view->width() - offset, view->height() - offset);
 
-    table->DrowTable(sqr_size);
-    table->GetScene()->setBackgroundBrush(QBrush(Qt::gray));
+    table.DrowTable(sqr_size);
+    table.GetScene()->setBackgroundBrush(QBrush(Qt::gray));
 
-    connect(table, &Table::TurnMade, this, &GameRules::AfterTurnMade);
+    connect(&table, &Table::TurnMade, this, &GameRules::AfterTurnMade);
 }
 
 void GameRules::FinishGame()
 {
-    table->ClearField();
-    table->SetTurn(value_type::X);
-}
-
-GameRules::~GameRules()
-{
-    delete table;
+    table.ClearField();
+    table.SetTurn(value_type::X);
 }
 
 void GameRules::AfterTurnMade(Table_::Square *square)
 {
-    auto it = std::find(table->GetSquares().begin(), table->GetSquares().end(), square);
-    int index = it - table->GetSquares().begin();
+    auto it = std::find(table.GetSquares().begin(), table.GetSquares().end(), square);
+    int index = it - table.GetSquares().begin();
 
-    switch(SearchWinner(table->GetSquares(), index)){
+    switch(SearchWinner(table.GetSquares(), index)){
         case value_type::X :
             QMessageBox::warning(nullptr, "", "X wins!");
-            table->ClearSquares();
-            table->SetTurn(value_type::X);
+            table.ClearSquares();
+            table.SetTurn(value_type::X);
         break;
         case value_type::O :
             QMessageBox::warning(nullptr, "", "O wins!");
-            table->ClearSquares();
-            table->SetTurn(value_type::X);
+            table.ClearSquares();
+            table.SetTurn(value_type::X);
         break;
         case value_type::T :
             QMessageBox::warning(nullptr, "", "You tied!");
-            table->ClearSquares();
-            table->SetTurn(value_type::X);
+            table.ClearSquares();
+            table.SetTurn(value_type::X);
         break;
         default : break;
     }

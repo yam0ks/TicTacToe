@@ -8,13 +8,26 @@
 
 #include "table.h"
 
+constexpr static int default_size = 3;
+
 class GameRules : public QObject
 {
     Q_OBJECT
 
 public:
-    GameRules();
+    GameRules() = default;
     value_type SearchWinner(const QVector<Table_::Square*>& squares, const int index) const;
+
+    void SetLineSize( const int new_size);
+    qreal GetLineSize() const;
+
+    void SetSqrSize(const int new_size);
+    qreal GetSqrSize() const;
+
+    void StartGame(QGraphicsView* view);
+    void FinishGame();
+
+private:
     value_type CheckRow(const QVector<Table_::Square*>& squares, const int index) const;
     value_type CheckColumn(const QVector<Table_::Square*>& squares, const int index) const;
     value_type CheckMainDiagonal(const QVector<Table_::Square*>& squares, const int index) const;
@@ -22,20 +35,9 @@ public:
     value_type CheckLine(const QVector<Table_::Square*>& squares) const;
     value_type CheckForTie(const QVector<Table_::Square*>& squares) const;
 
-    void SetLineSize( const int new_size);
-    int GetLineSize();
-
-    void SetSqrSize(const int new_size);
-    int GetSqrSize();
-
-    void StartGame(QGraphicsView* view);
-    void FinishGame();
-
-    ~GameRules();
-private:
-    int line_size = 3;
-    int sqr_size = 3;
-    Table* table;
+    int line_size = default_size;
+    int sqr_size = default_size;
+    Table table;
     bool changed = true;
 
 private slots:

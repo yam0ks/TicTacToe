@@ -9,23 +9,23 @@ void Table::DrowTable(const int sqr_size)
 {
     squares.reserve(sqr_size * sqr_size);
 
-    int xCoordinate = 0.35 * sqr_size;
-    int yCoordinate = 0;
+    qreal xCoordinate = 0.35 * sqr_size;
+    qreal yCoordinate = 0;
 
-    Table_::Square* square = new Table_::Square(QRect(xCoordinate, yCoordinate, scene->width() / sqr_size, scene->height() / sqr_size));
+    Table_::Square* square = new Table_::Square(QRect(xCoordinate, yCoordinate, scene->width() / qreal(sqr_size), scene->height() / qreal(sqr_size)));
     scene->addItem(square);
     squares.push_back(square);
 
     connect(square, &Table_::Square::NewTurn, this, &Table::NewTurn);
     connect(square, &Table_::Square::TurnMade, this, &Table::TurnMade);
 
-    DrowSquare(scene->width() / sqr_size + xCoordinate, yCoordinate, sqr_size);
+    DrowSquare(scene->width() / qreal(sqr_size) + xCoordinate, yCoordinate, sqr_size);
 }
 
-void Table::DrowSquare(const int xCoordinate,const int yCoordinate,const int sqr_size)
+void Table::DrowSquare(const qreal xCoordinate,const qreal yCoordinate,const int sqr_size)
 {
-    const int offset = 0.35 * sqr_size;
-    if(xCoordinate >= scene->width() - offset && yCoordinate + scene->height() / sqr_size >= scene->height() - offset)
+    const qreal offset = 0.35 * sqr_size;
+    if(xCoordinate >= scene->width() - offset && yCoordinate + scene->height() / qreal(sqr_size) >= scene->height() - offset)
         return;
 
     if(xCoordinate >= scene->width() - offset){
@@ -33,14 +33,14 @@ void Table::DrowSquare(const int xCoordinate,const int yCoordinate,const int sqr
         return;
     }
 
-    Table_::Square* square = new Table_::Square(QRect(xCoordinate, yCoordinate, scene->width() / sqr_size, scene->height() / sqr_size));
+    Table_::Square* square = new Table_::Square(QRect(xCoordinate, yCoordinate, scene->width() / qreal(sqr_size), scene->height() / qreal(sqr_size)));
     scene->addItem(square);
     squares.push_back(square);
 
     connect(square, &Table_::Square::NewTurn, this, &Table::NewTurn);
     connect(square, &Table_::Square::TurnMade, this, &Table::TurnMade);
 
-    DrowSquare(xCoordinate + scene->width() / sqr_size, yCoordinate, sqr_size);
+    DrowSquare(xCoordinate + scene->width() / qreal(sqr_size), yCoordinate, sqr_size);
 }
 
 bool Table::PaintValue(Table_::Square* square, const value_type current_turn)
@@ -140,7 +140,7 @@ void Table_::Square::SetValue(QGraphicsItem *item)
     value = item;
 }
 
-QGraphicsItem *Table_::Square::GetValue()
+QGraphicsItem *Table_::Square::GetValue() const
 {
     return value;
 }

@@ -33,7 +33,7 @@ class Square : public QGraphicsObject
     QRectF GetShape() const;
 
     void SetValue(QGraphicsItem* item);
-    QGraphicsItem* GetValue();
+    QGraphicsItem* GetValue() const;
 
     void SetType(const value_type new_type);
     value_type GetType() const;
@@ -64,7 +64,7 @@ public:
 
     Table();
     void DrowTable(const int sqr_size);
-    void DrowSquare(const int xCoordinate, const int yCoordinate, const int sqr_size);
+    void DrowSquare(const qreal xCoordinate, const qreal yCoordinate, const int sqr_size);
     bool PaintValue(Table_::Square* square, const value_type current_type);
     void ClearSquares();
     void ClearField();
